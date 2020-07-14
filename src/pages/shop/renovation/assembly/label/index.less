@@ -1,0 +1,155 @@
+
+@import '../variable.less';
+
+.labelComponents{
+  padding: 0 10px;
+  
+}
+
+.label-list{
+  margin-top: 10px;
+  .label-item{
+
+  }
+}
+
+.label-add-wrap{
+  padding: 0 10px;
+  border: @border;
+  margin-top: 20px;
+  .add{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    div{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 74px;
+      height: 31px;
+      border: @border;
+      background-color: #fff;
+      border-radius: 4px;
+      font-size: 12px;
+      color: #595961 !important;
+      .btn-hover;
+    }
+    span{
+      font-size: 12px;
+      color: #9797A1;
+    }
+  }
+}
+
+.goods-list{
+  padding: 0 10px;
+  .goods-item{
+    width: 100%;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    border: @border;
+    border-radius: 4px;
+    padding: 0 5px;
+    &:not(:last-child){
+      border-bottom: none;
+    }
+    img{
+      width: 30px;
+      height: 30px;
+      border-radius: 3px;
+      margin-right: 5px;
+    }
+    span{
+      flex: 1;
+      font-weight: 500;
+      font-family: Helvetica;
+      font-size: 12px;
+      white-space: nowrap;
+      word-break: break-all;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+    input{
+      width: 50px;
+      border: 1px solid #e3e2e5;
+      padding: 0 5px;
+      margin-right: 10px;
+    }
+    a{
+      font-size: 12px;
+    }
+  }
+  
+}
+
+.labelComponents{
+  :global{
+    .ant-radio-wrapper{
+      font-size: 12px !important;
+    }
+    .ant-btn, .ant-input{
+      font-size: 12px;
+    }
+    .ant-input-prefix, .ant-input-suffix{
+      display: flex;
+      align-items: center;
+      font-size: 12px;
+    }
+    
+  }
+}
+.goodsCount{
+  margin-left: 10px;
+  font-size: 12px;
+  color: #aaa;
+}
+
+.label-list{
+  .tags{
+    display: flex;
+    margin-top: 10px;
+  }
+  :global{
+    .smooth-dnd-container{
+      min-height: 0px !important;
+    }
+  }
+}
+
+.label-box{
+  padding: 0 10px;
+  margin-bottom: 10px;
+  .label-item{
+    width: 100%;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    border: @border;
+    border-radius: 4px;
+    padding: 0 10px;
+    &:not(:last-child){
+      border-bottom: none;
+    }
+    img{
+      width: 30px;
+      height: 30px;
+      border-radius: 3px;
+      margin-right: 5px;
+    }
+    span{
+      flex: 1;
+      font-weight: 500;
+      font-family: Helvetica;
+      font-size: 12px;
+      white-space: nowrap;
+      word-break: break-all;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+    a{
+      font-size: 12px;
+    }
+  }
+}

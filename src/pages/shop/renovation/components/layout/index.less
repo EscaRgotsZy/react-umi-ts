@@ -1,0 +1,71 @@
+@margin: 24px;// 中间区域的margin
+@headerHeight: 64px;// 头部的高
+
+.fl, .fr{
+  &::before{
+    content: " ";
+    display: table;
+    box-sizing: border-box;
+  }
+}
+.fl{
+  float: left;
+}
+.fr{
+  float: right;
+}
+
+.clearfix{
+  &::before, &::after{
+    content:" ";
+    display:table;
+  }
+  &::after{
+    clear: both;
+  }
+}
+
+
+.stage{
+  position: relative;
+  width: 100%;
+  background: #F2F2F6;
+  min-height: calc(100vh - @margin * 2 - @headerHeight - 40px);
+  min-height: calc(100vh - @margin * 2 - @headerHeight - 40px);
+  border-radius: 5px;
+  text-align: center;
+  zoom: 1;
+}
+
+.components{
+  width: 240px;
+  background: #fff;
+  padding: 0 10px 10px;
+  border-radius: 2px;
+  text-align: left;
+}
+
+.iphoneBox{
+  display: inline-block;
+  width: 385px;
+  background: #fff;
+  margin: 0 auto;
+}
+
+.setting{
+  position: relative;
+  width: 360px;
+  background: #fff;
+  border-radius: 8px;
+  text-align: left;
+}
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,30 @@
+
+@import '../../variable.less';
+
+
+.template{
+  width: 100%;
+  border: @border;
+  padding: 5px;
+  border-radius: 5px;
+  
+  &.border-bottom-none{
+    border-bottom: none;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+  img{
+    width: 100%;
+    height: auto;
+  }
+}
+.styleBtn{
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  border: @border;
+  .btn-hover;
+}

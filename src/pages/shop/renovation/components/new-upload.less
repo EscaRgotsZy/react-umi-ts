@@ -1,0 +1,68 @@
+
+.upload-box{
+  display: flex;
+}
+
+.upload-img{
+  position: relative;
+  margin-right: 20px;
+  img{
+    width: 40px;
+    height: 40px;
+  }
+  .del-img{
+    position: absolute;
+    top: -7px;
+    right: -7px;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: #fff url(../../../../assets/common/delete.png) no-repeat;
+    background-size: 100% 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    color: #fff;
+    cursor: pointer;
+  }
+}
+
+.upload-btn{
+  position: relative;
+  width: 100px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  border: 1px solid #e3e2e5;
+  touch-action: manipulation;
+  overflow: hidden;
+  white-space: nowrap;
+  user-select: none;
+  cursor: pointer;
+  input{
+    position: absolute;
+    width: 100px;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    opacity: 0;
+    cursor: pointer;
+  }
+  span{
+    font-size: 12px;
+    color: #595961 !important;
+    cursor: pointer;
+  }
+}
+
+
+.small{
+  .upload-btn{
+    width: 80px;
+    height: 26px;
+  }
+}

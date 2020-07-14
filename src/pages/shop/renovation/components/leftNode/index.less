@@ -1,0 +1,64 @@
+
+
+.title{
+  display: flex;
+  align-items: center;
+  height: 50px;
+  user-select: none;
+  span{
+    font-size: 13px;
+    font-weight: 500;
+    color: #333;
+  }
+  span:last-child{
+    font-size: 12px;
+    color: #aaa;
+    margin-left: 10px;
+  }
+}
+.component-list{
+  width: 100%;
+  background: #F2F2F6;
+  overflow-y: auto;
+  height: 500px;
+  border-radius: 5px;
+  padding: 10px 0 0 5px;
+  font-size: 0;
+  :global{
+    .smooth-dnd-container{
+      .smooth-dnd-draggable-wrapper{
+        display: inline-block !important;
+        margin-bottom: 10px;
+      }
+      &>.smooth-dnd-draggable-wrapper:nth-child(even){
+        margin-left: 10px;
+      }
+    }
+  }
+  
+  
+  .item{
+    width: 100px;
+    height: 85px;
+    display: inline-block;
+    border: 1px solid #E3E2E5;
+    border-radius: 4px;
+    text-align: center;
+    background-color: #FFFFFF;
+    cursor: pointer;
+    &:hover{
+      border: 1px solid #2589FF !important;
+    }
+    img{
+      width: 88px;
+      height: 55px;
+    }
+    span{
+      width: 88px;
+      height: 17px;
+      font-size: 12px;
+      color: #595961;
+      font-weight: bold;
+    }
+  }
+}

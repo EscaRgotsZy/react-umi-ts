@@ -1,0 +1,46 @@
+
+@border: 1px solid #ccc;
+
+.wrap{
+  position: relative;
+  display: flex;
+  border: @border;
+  margin-bottom: 10px;
+  .leftContent{
+    width: 15%;
+    border-right: @border;
+    padding: 5px;
+    :global{
+      .ant-tag{
+        margin-bottom: 5px;
+      }
+    }
+  }
+  .rightContent{
+    flex: 1;
+  }
+}
+
+.rightItem{
+  display: flex;
+  align-items: center;
+  height: 45px;
+  .center{
+    display: flex; 
+    align-items: center;
+    justify-content: center;
+  }
+  &>div:not(:last-child){
+    height: 45px;
+    border-right: @border;
+  }
+}
+
+.pl20{
+  padding-left: 20px;
+}
+.borderTB{
+  border-bottom: @border;
+  border-top: @border;
+}
+

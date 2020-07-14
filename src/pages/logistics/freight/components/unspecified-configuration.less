@@ -1,0 +1,35 @@
+
+@border: 1px solid #ccc;
+
+.wrap{
+  position: relative;
+  display: flex;
+  border: @border;
+  margin-bottom: 10px;
+}
+
+.leftContent{
+  width: 15%;
+  border-right: @border;
+  padding: 5px;
+  :global{
+    .ant-tag{
+      margin-bottom: 5px;
+    }
+  }
+}
+
+.rightContent{
+  flex: 1;
+}
+
+.rightItem{
+  height: 45px;
+  display: flex;
+  align-items: center;
+  padding-left: 20px;
+  &:first-child{
+    border-bottom: @border;
+  }
+}
+

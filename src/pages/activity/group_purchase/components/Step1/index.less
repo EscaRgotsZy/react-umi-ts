@@ -1,0 +1,22 @@
+.pstyle1{
+  max-width: 500px;
+  height: 25px;
+  line-height: 25px;
+  padding-left: 10px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap
+}
+
+.table{
+  td:nth-child(2){
+    display: none;
+  }
+}
+:global{
+  .ant-table-thead{
+    .ant-table-row-expand-icon-cell{
+      display: none;
+    }
+  }
+}

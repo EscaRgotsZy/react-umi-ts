@@ -1,0 +1,37 @@
+
+@import '../variable.less';
+
+.titleComponents{
+  padding: 0 10px;
+  .title-list{
+    margin-top: 10px;
+  }
+}
+
+
+.title-list{
+  .goods{
+    margin-top: 10px;
+    font-size: 12px;
+    color: #888;
+    word-break: break-all;
+    overflow: hidden;
+  }
+  .tags{
+    display: flex;
+    margin-top: 10px;
+  }
+  :global{
+    .ant-radio-wrapper{
+      font-size: 12px !important;
+    }
+    .ant-btn, .ant-input{
+      font-size: 12px;
+    }
+    .ant-input-prefix, .ant-input-suffix{
+      display: flex;
+      align-items: center;
+      font-size: 12px;
+    }
+  }
+}

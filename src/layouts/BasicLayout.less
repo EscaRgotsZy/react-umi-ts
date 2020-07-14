@@ -1,0 +1,65 @@
+
+body {
+  background-color: #f0f2f5;
+}
+
+@openWidth: 220px !important;// 菜单展开的宽度
+@closeWidth: 80px !important;// 菜单收起的宽度
+
+.basicLayout{
+  :global{
+    .ant-layout-has-sider{
+      .ant-pro-sider-menu-sider{
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        width: @openWidth;
+        max-width: @openWidth;
+        min-width: @openWidth;
+        .ant-layout-sider-children{
+          height: 100vh;
+          overflow: hidden;
+          display: flex;
+          flex-direction: column;
+          &>.ant-menu{
+            flex: 1;
+            overflow-y: auto;
+            &::-webkit-scrollbar {
+              width : 6px;
+              height: 1px;
+            }
+            &::-webkit-scrollbar-thumb {
+              border-radius: 3px;
+              background   : #ccc;
+            }
+            &::-webkit-scrollbar-track {
+              border-radius: 3px;
+              background   : transparent;
+            }
+          }
+        }
+      }
+      &>.ant-layout{
+        transition: padding-left .3s;
+        padding-left: @openWidth;
+      }
+    }
+  }
+}
+
+.collapsed.basicLayout{
+  background: red;
+  :global{
+    .ant-pro-sider-menu-sider{
+      width: @closeWidth;
+      max-width: @closeWidth;
+      min-width: @closeWidth;
+    }
+    .ant-layout-has-sider{
+      &>.ant-layout{
+        padding-left: @closeWidth;
+      }
+    }
+  }
+}

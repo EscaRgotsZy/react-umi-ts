@@ -1,0 +1,44 @@
+// 布局样式 - 内容 
+.pageContent{
+  margin: 15px;
+}
+.modal{
+  :global{
+    .ant-modal-header{
+      background: rgba(24, 144, 255, 1);
+      .ant-modal-title{
+        color: #fff;
+      }
+    }
+    .ant-modal-close-x{
+      color: #fff;
+    }
+  }
+}
+.qrcodeBox{
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+.qrcodeTitle{
+  font-size: 20px;
+  color: black;
+  margin-bottom: 15px;
+  em{
+    font-size: 12px;
+    font-style: normal;
+  }
+}
+.copy{
+  width: 50px;
+  height: 25px;
+  text-align: center;
+  background: #1790ff;
+  display: inline-block;
+  line-height: 25px;
+  margin-left: 10px;
+  cursor: pointer;
+  font-size: 15px;
+  color: #fff;
+}

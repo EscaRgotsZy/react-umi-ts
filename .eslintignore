@@ -1,0 +1,9 @@
+/lambda/
+/scripts
+/config
+/dist
+/docs
+/public
+/build
+/mock
+.history

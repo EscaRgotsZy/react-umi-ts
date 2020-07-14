@@ -1,0 +1,24 @@
+.key{
+  position: relative;
+  display: inline-block;
+  color: #595961;
+  font-size: 12px;
+  padding-left: 10px;
+  width: 100%;
+  overflow: hidden;
+  word-break: break-all;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  &.required{
+    &::after{
+      position: absolute;
+      content: '';
+      right: 2px;
+      top: 6px;
+      background-color: #FF5050;
+      width: 4px;
+      height: 4px;
+      border-radius: 2px;
+    }
+  }
+}

@@ -1,0 +1,35 @@
+
+
+@border: 1px solid #ccc;
+
+
+
+.wrap{
+  position: relative;
+  display: flex;
+  border: @border;
+  margin-bottom: 40px;
+}
+
+
+
+.leftContent{
+  width: 15%;
+  border-right: @border;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.rightContent{
+  flex: 1;
+}
+
+.rightItem{
+  height: 45px;
+  display: flex;
+  align-items: center;
+  &:first-child{
+    border-bottom: @border;
+  }
+}
