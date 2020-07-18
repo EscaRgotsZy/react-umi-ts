@@ -38,7 +38,7 @@ const Login: React.FC<LoginProps> = (props) => {
   const [companyList, setCompanyList] = useState([]);
   const [curCompany, setCurCompany] = useState(0);
 
-  const { refresh  } = useModel('@@initialState');
+  const { refresh } = useModel('@@initialState');
 
   useEffect(()=>{
     let defaultList:any = DefaultCompany.get()

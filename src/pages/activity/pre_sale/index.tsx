@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import moment from 'moment';
-import { getPageQuery } from '@/utils/utils';
+import { getPageQuery,saveUrlParams } from '@/utils/utils';
 import { Card, Form, Row, Col, Input, Table, Button, Popconfirm,} from 'antd';
 import {
   preSaleListParams,
@@ -179,14 +179,12 @@ export default class preSale extends Component<UserProp, UserState> {
       presellName,
       productId,
     };
-    this.props.history.replace({
-      query: {
-        pageNum: this.state.pageNum,
-        pageSize: this.state.pageSize,
-        key: this.state.currentTab,
-        presellName,
-        productId,
-      }
+    saveUrlParams({
+      key: this.state.currentTab,
+      pageNum: params.page,
+      pageSize: params.size,
+      presellName: params.presellName,
+      productId: params.productId,
     })
     this.setState({ loading: true });
     let res = await GetPreSaleList(params);

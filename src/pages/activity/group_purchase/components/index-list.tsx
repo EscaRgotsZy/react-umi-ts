@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useImperativeHandle, forwardRef } from 'react';
 import { history, Link } from 'umi'
 import { Form, Input, Table, Button, Popconfirm, message } from 'antd';
 import { PlusOutlined } from '@ant-design/icons'
 import moment from 'moment'
 import config from '@/config/index'
-import { Copy } from '@/utils/utils'
-
+import { Copy, saveUrlParams } from '@/utils/utils'
 import { getGrouponList, delGroupon, onLineGroupon, offLineGroupon } from '@/services/activity/group_purchase'
 
 const statusText = new Map()
@@ -28,7 +27,7 @@ function statusType(status: number) {
 interface useProps {
   status: string;
 }
-const GroupActivityList: React.FC<useProps> = (props) => {
+const GroupActivityList = forwardRef((props: useProps, ref) => {
   const { page, size } = (history.location as any).query;
   const [form] = Form.useForm()
   const [loading, setLoading] = useState(false)
@@ -36,34 +35,44 @@ const GroupActivityList: React.FC<useProps> = (props) => {
   const [pageInfo, setPageInfo] = useState({ page: +page || 1, size: +size || 10 })
   const [pageTotal, setPageTotal] = useState(0)
 
+  useImperativeHandle(ref, () => ({
+    resetPage: () => {
+      reset()
+    }
+  }));
 
   useEffect(() => {
-    reset()
-  }, [props.status])
+    let { groupName, } = history.location.query;
+    form.setFieldsValue({ groupName })
+  }, [])
 
   useEffect(() => {
     getDataInfo()
-  }, [pageInfo])
+  }, [pageInfo, props.status])
 
   // 列表
   async function getDataInfo() {
     let groupName = form.getFieldValue('groupName')
+    let { page, size } = pageInfo;
     let params: any = {
-      page: pageInfo.page,
-      size: pageInfo.size,
+      page,
+      size,
       groupName,
       status: props.status,
       sortBy: '-modifyTime'
     };
-    // history.replace({
-    //   query: params
-    // });
     setLoading(true);
     let res = await getGrouponList(params);
     setLoading(false);
     let { records, total } = res;
     setList(records);
     setPageTotal(total);
+    saveUrlParams({
+      page: params.page,
+      size: params.size,
+      groupName: params.groupName,
+      status: params.status,
+    })
   }
 
   function query() {
@@ -84,7 +93,6 @@ const GroupActivityList: React.FC<useProps> = (props) => {
 
 
   async function changeStatus(id: number, type: string) {
-    let res;
     setList(list.map(v => {
       return {
         ...v,
@@ -92,10 +100,10 @@ const GroupActivityList: React.FC<useProps> = (props) => {
       }
     }))
     if (type === 'online') {
-      res = await onLineGroupon({ id });
+      await onLineGroupon({ id });
     }
     if (type === 'offline') {
-      res = await offLineGroupon({ id });
+      await offLineGroupon({ id });
     }
     setList(list.map(v => {
       return {
@@ -109,7 +117,6 @@ const GroupActivityList: React.FC<useProps> = (props) => {
   // 分页器
   function onTableChange({ current, pageSize }: any) {
     setPageInfo({ page: current, size: pageSize })
-    getDataInfo()
   }
   const pagination = {
     showQuickJumper: true,
@@ -241,6 +248,5 @@ const GroupActivityList: React.FC<useProps> = (props) => {
         pagination={pagination} />
     </>
   )
-}
-
-export default GroupActivityList;
+})
+export default GroupActivityList 

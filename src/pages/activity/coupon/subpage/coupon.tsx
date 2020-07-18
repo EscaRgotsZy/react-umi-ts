@@ -5,9 +5,11 @@ import {
   getCouponList,
   UpdateCouponItem,
 }from '@/services/activity/coupon'
+import { getPageQuery, saveUrlParams } from '@/utils/utils';
 const { Option } = Select;
 const FormItem = Form.Item;
 interface UserState {
+  serchParams: any,
   pageSize: number,
   pageNum: number,
   total: number,
@@ -15,17 +17,19 @@ interface UserState {
   tableList: Array<any>,
 }
 interface UserProp  {
-  history: any;
+  // history: any;
 }
 export default class Coupon extends Component<UserProp, UserState> {
   formRef: React.RefObject<any>;
   constructor(props: UserProp) {
     super(props);
     this.formRef = React.createRef();
+    let serchParams = getPageQuery();
     this.state = {
+      serchParams,
       loading: false, 
-      pageSize: 10,
-      pageNum: 1,
+      pageNum: serchParams.page ? +serchParams.page : 1,
+      pageSize: serchParams.size ? +serchParams.size : 10,
       total: 0,
       tableList: [], 
     }
@@ -91,7 +95,13 @@ export default class Coupon extends Component<UserProp, UserState> {
     }
   ]
   componentDidMount() {
+    let { couponName='' , status='' } = this.state.serchParams;
+    if(couponName || status){
+      this.formRef.current.setFieldsValue({ couponName, status })
+      this.getDataList()
+    }else{
       this.getDataList();
+    }
   }
   //获取数据
   getDataList = async () => {
@@ -103,6 +113,12 @@ export default class Coupon extends Component<UserProp, UserState> {
       status,
       sortBy: '-createTime',
     };
+    saveUrlParams({
+      couponName: params.couponName,
+      status: params.status,
+      page: params.page,
+      size: params.size,
+    })
     this.setState({loading:true})
     let res = await getCouponList(params);
     this.setState({loading:false});
@@ -120,18 +136,23 @@ export default class Coupon extends Component<UserProp, UserState> {
   }
   // 重置
   resetForm = () => {
+    this.setState({
+      pageNum: 1,
+      pageSize: 10,
+    }, () => {
+      this.getDataList()
+    })
     this.formRef.current.resetFields();
+  }
+  query = () => {
+    this.setState({
+      pageSize: 10,
+      pageNum: 1
+    }, this.getDataList)
   }
   // 刷新
   refresh = () => {
     this.getDataList();
-  }
-  // 查询
-  query = () => {
-    this.setState({
-      pageSize: 10,
-      pageNum: 0
-    }, this.getDataList)
   }
   onTableChange = ({ current: pageNum, pageSize }:any) => {
     this.setState({
@@ -177,7 +198,7 @@ export default class Coupon extends Component<UserProp, UserState> {
         </Col>
         <Col span={4}>
           <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <Button type="primary" onClick={this.getDataList}>
+            <Button type="primary" onClick={this.query}>
               查询
             </Button>
             <Button style={{ marginLeft: 8 }} onClick={this.resetForm}>

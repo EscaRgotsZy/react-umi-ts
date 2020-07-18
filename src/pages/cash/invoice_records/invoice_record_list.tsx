@@ -8,6 +8,7 @@ import {
   getInvoiceRecordsList,
   cancleCheck
 } from '@/services/cash/invoice_records';
+import { saveUrlParams } from '@/utils/utils'
 interface UserState {
   searchUrl: any,
   loading: boolean;
@@ -36,8 +37,8 @@ export default class limits extends Component<UserProp, UserState> {
     this.state = {
       searchUrl,
       loading: false,
-      pageNum: searchUrl.pageNum ? +searchUrl.pageNum : 1,
-      pageSize: searchUrl.pageSize ? +searchUrl.pageSize : 10,
+      pageNum: searchUrl.page ? +searchUrl.page : 1,
+      pageSize: searchUrl.size ? +searchUrl.size : 10,
       total: 0,
       currentTab: searchUrl.key || '2',
       startTime: '',
@@ -107,25 +108,23 @@ export default class limits extends Component<UserProp, UserState> {
     ]
     componentDidMount() {
       let { startTime='', endTime='',invoiceStatus='',invoiceName='',invoiceContent=''  } = this.state.searchUrl;
-      if ( startTime || endTime){
-        this.formRef.current.setFieldsValue({ applicationTime: [moment(startTime, 'YYYY-MM-DD HH:mm:ss'), moment(endTime, 'YYYY-MM-DD HH:mm:ss')]}, this.getDataList);
-        this.setState({
-          startTime,
-          endTime
+      if ( startTime || endTime || invoiceStatus || invoiceName || invoiceContent){
+        this.formRef.current.setFieldsValue({ 
+          applicationTime: [moment(startTime), moment(endTime)],
+          invoiceStatus, 
+          invoiceName, 
+          invoiceContent
+        });
+        this.setState({ startTime, endTime }, () => {
+          this.getDataList();
         })
-      }
-      if( invoiceStatus || invoiceName || invoiceContent ){
-        this.formRef.current.setFieldsValue({ invoiceStatus, invoiceName, invoiceContent })
-        this.getDataList()
-      }
-      if(!startTime && !endTime && !invoiceStatus && !invoiceName && !invoiceContent ){
-        this.getDataList()
+      } else {
+        this.getDataList();
       }
     }
     //跳转开票设置
     handleGoSettingPage = () => {
       return `#/cash/invoice_records/invoice_setting_list`
-     
     }
     //跳转详情
     handleGoPage = (record:any) => {
@@ -136,7 +135,6 @@ export default class limits extends Component<UserProp, UserState> {
     getDataList = async ():Promise<any> => {
       let { pageSize, pageNum, startTime, endTime } = this.state
       let { invoiceStatus='',invoiceName='',invoiceContent='' } = this.formRef.current.getFieldsValue();
-      // this.props.history.push({search: `pageSize=${pageSize || 10}&pageNum=${pageNum || 1}&invoiceName=${invoiceName}&invoiceContent=${invoiceContent}&invoiceStatus=${invoiceStatus}&startTime=${startTime || ''}&endTime=${endTime ||''}`})
       let params:getInvoiceRecordsParams = {
         productId:'',
         invoiceName,    
@@ -148,7 +146,16 @@ export default class limits extends Component<UserProp, UserState> {
         size: pageSize,
         sortBy: '-createTime',                         
       }
-      
+      saveUrlParams({
+        productId: params.productId,
+        invoiceName: params.invoiceName,    
+        invoiceContent: params.invoiceContent, 
+        startTime: params.startTime, 
+        endTime: params.endTime, 
+        invoiceStatus: params.invoiceStatus,                       
+        page: params.page, 
+        size: params.size, 
+      })
       this.setState({ loading: true });
       let res = await getInvoiceRecordsList(params);  
       this.setState({ loading: false })
@@ -190,13 +197,15 @@ export default class limits extends Component<UserProp, UserState> {
     }
     // 重置
     reset = () => {
-      this.formRef.current.resetFields();
       this.setState({
         pageNum: 1,
         pageSize: 10,
+        endTime: '', 
+        startTime: ''
       }, () => {
         this.getDataList()
       })
+      this.formRef.current.resetFields();
     };
     // 取消
     handleCancle = async(record:any):Promise<any> => {
@@ -225,9 +234,7 @@ export default class limits extends Component<UserProp, UserState> {
             <Form layout="inline" ref={this.formRef}>
               <Form.Item label="申请日期：" name='applicationTime' style={{marginBottom:'10px'}}>
                   <RangePicker
-                    showTime={{
-                      defaultValue: [moment('00:00:00', 'HH:mm:ss'), moment('23:59:59', 'HH:mm:ss')],
-                    }}
+                    showTime={{ format: 'HH:mm:ss' }}
                     onChange={this.checkDate}
                     format="YYYY-MM-DD HH:mm:ss"
                     style={{ width: 380 }}

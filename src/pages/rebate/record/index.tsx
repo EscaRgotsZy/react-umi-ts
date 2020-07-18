@@ -3,7 +3,7 @@ import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { Table, Card } from 'antd';
 import moment from 'moment';
 import { getBuildFee, GetBuildFeeParams } from '@/services/rabate/record';
-
+import { saveUrlParams } from '@/utils/utils'
 const statusMap = {
   '0': '待入帐',
   '1': '已入账',
@@ -30,16 +30,15 @@ const RebateRecord: React.FC<UserProp> = (props) => {
       page: pageInfo.pageNum,
       size: pageInfo.pageSize,
     };
-    props.history.replace({
-      query: {
-        pageNum: pageInfo.pageNum,
-        pageSize: pageInfo.pageSize,
-      },
-    });
+    
     let { total, records } = await getBuildFee(params);
     setLoading(false);
     setTableList(records);
     setPageTotal(total);
+    saveUrlParams({
+      pageNum: pageInfo.pageNum,
+      pageSize: pageInfo.pageSize,
+    })
   }
 
   const columns = [

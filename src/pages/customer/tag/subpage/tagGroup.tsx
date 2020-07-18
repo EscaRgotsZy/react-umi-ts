@@ -9,6 +9,7 @@ import {
   editTagGroupItemParams,
   editTagGroupItem
 }from '@/services/customer/tag';
+import { saveUrlParams } from '@/utils/utils'
 const FormItem = Form.Item;
 interface UserState {
   pageSize: number,
@@ -20,7 +21,6 @@ interface UserState {
   id: string,
 }
 interface UserProp  {
-  history: any;
 }
 const { Search } = Input;
 export default class TagGroup extends Component<UserProp, UserState> {
@@ -69,13 +69,12 @@ export default class TagGroup extends Component<UserProp, UserState> {
       size: pageSize,
       sortBy: '-createTime',
     }
-    // this.props.history.replace({
-    //   query: {
-    //     pageNum,
-    //     pageSize,
-    //     name
-    //   }
-    // })
+    saveUrlParams({
+      key: 2,
+      pageNum: this.state.pageNum,
+      pageSize: this.state.pageSize,
+      name: params.name,
+    })
     this.setState({ loading: true });
     let res = await getTagGroupList(params)
     this.setState({ loading: false })

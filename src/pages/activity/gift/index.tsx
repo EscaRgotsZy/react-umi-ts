@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import { handlePicUrl, getPageQuery } from '@/utils/utils';
+import { handlePicUrl, getPageQuery, saveUrlParams } from '@/utils/utils';
 import moment from 'moment';
 import { Card, Form, Row, Col, Input, Table, Button, Popconfirm, message, Divider, Select, } from 'antd';
 import {
@@ -118,15 +118,13 @@ export default class giftsList extends Component<UserProp, UserState> {
       productName,
       sortBy: '-createTime'
     };
-    // this.props.history.replace({
-    //   query: {
-    //     pageNum,
-    //     pageSize,
-    //     status,
-    //     productId,
-    //     productName,
-    //   }
-    // })
+    saveUrlParams({
+      pageNum: params.page,
+      pageSize: params.size,
+      status: params.status,
+      productId: params.productId,
+      productName: params.productName,
+    })
     this.setState({ loading: true });
     let res = await getGiftsActivityList(params);
     this.setState({ loading: false });

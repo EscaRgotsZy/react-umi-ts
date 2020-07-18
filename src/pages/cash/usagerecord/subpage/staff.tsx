@@ -7,6 +7,7 @@ import { SearchOutlined, ReloadOutlined, DownloadOutlined } from '@ant-design/ic
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { getPageQuery, downloadFile } from '@/common/utils';
 import moment from 'moment';
+import { saveUrlParams } from '@/utils/utils';
 import {
     getUsageRecordInfo,
 } from '@/services/cash/usageRecord';
@@ -20,7 +21,7 @@ interface UserProp {
 }
 interface UserState {
     searchParams: any;
-    employeeId: number | string;
+    employeeId: any;
     loading: boolean;
     pageInfo: any;
     total: any;
@@ -102,9 +103,18 @@ export default class StaffRecord extends Component<UserProp, UserState> {
             employeeId,
             sortBy: '-createTime'
         }
+       
         if (startTime) query.startTime = startTime;
         if (endTime) query.endTime = endTime;
         if (source) query.source = source;
+        saveUrlParams({
+            startTime: query.startTime,
+            endTime: query.endTime,
+            employeeId: query.employeeId,
+            source: query.source,
+            page: query.page,
+            size: query.size,
+        })
         return query
     }
     getDataList = async () => {

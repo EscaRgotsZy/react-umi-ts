@@ -38,12 +38,6 @@ export default class cashCouponManage extends Component<UserProp, UserState> {
   // 切换tab
   tabChange = async (type: string | number) => {
     this.setState({ currentTab: type + '' })
-    await sleep(500)
-    this.props.history.push({
-      query: {
-        key: type
-      }
-    });
   }
   render() {
     const { currentTab } = this.state;

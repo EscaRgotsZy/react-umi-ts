@@ -4,6 +4,7 @@ import { Card, Input, Table, Button,  Form, Row, Col, Select } from 'antd';
 import styles from './index.less';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { getPageQuery } from '@/common/utils';
+import { saveUrlParams } from '@/utils/utils';
 import { SearchOutlined, ReloadOutlined, DownloadOutlined } from '@ant-design/icons';
 import {
     getCashCouponsList,
@@ -32,8 +33,8 @@ export default class UsageRecord extends Component<UserProp, UserState> {
         this.state = {
             searchParams,
             pageInfo: {
-                pageNum: searchParams.pageNum ? +searchParams.pageNum : 1,
-                pageSize: searchParams.pageSize ? +searchParams.pageSize : 30,
+                pageNum: searchParams.page ? +searchParams.page : 1,
+                pageSize: searchParams.size ? +searchParams.size : 30,
             },
             total: '',
             loading: false,
@@ -94,7 +95,13 @@ export default class UsageRecord extends Component<UserProp, UserState> {
         if (realName) query.realName = realName.trim();
         if (cellphone) query.cellphone = cellphone.trim();
         if (employeeStatus) query.employeeStatus = employeeStatus;
-        this.props.history.push({ search: `realName=${query.realName || ''}&cellphone=${query.cellphone || ''}&employeeStatus=${query.employeeStatus ? query.employeeStatus : '-1'}&pageNum=${query.page || 1}&pageSize=${query.size || 30}` })
+        saveUrlParams({
+            realName: query.realName,
+            cellphone: query.cellphone,
+            employeeStatus: query.employeeStatus,
+            page: query.page,
+            size: query.size,
+        })
         return query
     }
     getDataList = async () => {

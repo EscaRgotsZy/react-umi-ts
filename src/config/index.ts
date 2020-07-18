@@ -19,7 +19,7 @@ switch (REACT_APP_ENV) {
     break;
   case 'dev':
     h5Path = 'http://10.10.4.105:1000';
-    server = 'http://10.10.4.112:8000/api/corp';
+    server = 'http://10.10.4.160:30915/api/corp';
     loginServer = 'http://10.10.4.112:8000/api/passport/corp';
     controlService = 'http://10.10.4.112:8000'
     break;
@@ -31,7 +31,7 @@ switch (REACT_APP_ENV) {
     break;
   default:
     h5Path = 'http://10.10.4.112:8000';
-    server = 'http://10.10.4.112:8000/api/corp';
+    server = 'http://10.10.4.160:30915/api/corp';
     loginServer = 'http://10.10.4.112:8000/api/passport/corp';
     controlService = 'http://10.10.4.112:8000'
     break;

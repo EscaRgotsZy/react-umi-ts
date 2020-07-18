@@ -3,7 +3,7 @@ import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { Table, Card } from 'antd';
 import moment from 'moment';
 import { getWithdraw, GetWithdrawParams } from '@/services/rabate/cash_out';
-
+import { saveUrlParams } from '@/utils/utils'
 const statusMap = {
   '0': '待入帐',
   '1': '已入账',
@@ -34,17 +34,16 @@ const RebateRecord: React.FC<UserProp> = (props) => {
     if (tabIndex !== '-1') {
       params.status = tabIndex;
     }
-    props.history.replace({
-      query: {
-        key: tabIndex,
-        pageNum: pageInfo.pageNum,
-        pageSize: pageInfo.pageSize,
-      },
-    });
+    
     let { total, records } = await getWithdraw(params);
     setLoading(false);
     setTableList(records);
     setPageTotal(total);
+    saveUrlParams({
+      key: tabIndex,
+      pageNum: pageInfo.pageNum,
+      pageSize: pageInfo.pageSize,
+    })
   }
 
   const columns = [

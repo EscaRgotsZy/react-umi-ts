@@ -14,7 +14,7 @@ import {
   allTagListParams,
   getAllTagList
 } from '@/services/goods/warehouse/list';
-import { handlePicUrl, getPageQuery } from '@/utils/utils';
+import { handlePicUrl, getPageQuery, saveUrlParams } from '@/utils/utils';
 import moment from 'moment';
 const { TabPane } = Tabs;
 const FormItem = Form.Item;
@@ -422,13 +422,14 @@ export default class wareHouse extends Component<UserProp, UserState> {
       sortBy,
       outerId: outerId && outerId.trim(),
     };
-    this.props.history.push({
-      search: `key=${this.currentTab}&productName=${productName || ''}&outerId=${
-        outerId || ''
-        }&status=${status || ''}&pageNum=${this.state.pageNum}&pageSize=${
-        this.state.pageSize
-        }&sortBy=${sortBy}`,
-    });
+    saveUrlParams({
+      key: this.currentTab,
+      productName: params.productName,    
+      outerId: params.outerId, 
+      status: params.status,
+      pageNum: params.page, 
+      pageSize: params.size,                       
+    })
     this.setState({ loading: true });
     let res = await getSellingProd(params);
     this.setState({ loading: false });
@@ -452,9 +453,9 @@ export default class wareHouse extends Component<UserProp, UserState> {
   };
   // 重置
   reset = () => {
-    this.setState({ pageSize: 10, pageNum: 1 });
     this.currentTab = '0';
     this.formRef.current.resetFields();
+    this.setState({ pageSize: 10, pageNum: 1 }, () => this.getDataList());
   };
   // 刷新
   refresh = () => {
@@ -568,9 +569,7 @@ export default class wareHouse extends Component<UserProp, UserState> {
   // 修改
   editUpdate = (record: any) => {
     let { productId, categoryId } = record;
-    this.props.history.push(
-      `/goods/cate/publish?productId=${productId}&cateId=${categoryId}`,
-    );
+    return `#/goods/cate/publish?productId=${productId}&cateId=${categoryId}`
   };
   // 删除商品
   handleDelete = (record: any) => {

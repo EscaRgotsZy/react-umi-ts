@@ -9,7 +9,7 @@ interface UserProp {
     history: any;
 }
 interface UserState {
-    itemId: string | number,
+    itemId: any,
     loading: boolean,
     data: any,
     customParam: any,

@@ -16,7 +16,7 @@ interface UserProp {
     history: any,
 }
 interface UserState {
-    reChargeId:number | string;
+    reChargeId:any;
     dataInfo:any;
 }
 export default class ReChargeInfo extends Component<UserProp, UserState> {

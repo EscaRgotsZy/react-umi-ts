@@ -3,7 +3,7 @@ import { Card, Form, Row, Col, Input, Table, Button, Popconfirm, Modal, message,
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { SearchOutlined, SyncOutlined } from '@ant-design/icons';
 import { getSellingProd, sellProdParams, offlineProd, batchOnOffLine } from '@/services/goods/sell/list';
-import { handlePicUrl, getPageQuery } from '@/utils/utils';
+import { handlePicUrl, getPageQuery, saveUrlParams } from '@/utils/utils';
 const FormItem = Form.Item;
 interface UserProp {
   history: any;
@@ -133,10 +133,13 @@ export default class SellGoods extends Component<UserProp, UserState> {
       outerId: outerId && outerId.trim(),
     };
     this.setState({ loading: true, tableList: [] });
-    this.props.history.push({
-      search: `productName=${productName || ''}&outerId=${outerId || ''}&status=${1}&pageNum=${this.state.pageNum
-        }&pageSize=${this.state.pageSize}`,
-    });
+    saveUrlParams({
+      productName: params.productName,
+      outerId: params.outerId,    
+      status: params.status, 
+      pageNum: params.page, 
+      pageSize: params.size,                       
+    })
     let res = await getSellingProd(params);
     this.setState({ loading: false });
     if (!res) return false;

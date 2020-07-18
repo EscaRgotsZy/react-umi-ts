@@ -4,6 +4,7 @@ import moment from 'moment';
 import { Card, Form, Row, Col, DatePicker, Button, Divider, Table } from 'antd';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { moneyNum, teamFeeIncome, TeamFeeIncomeParams } from '@/services/home';
+import { saveUrlParams } from '@/utils/utils'
 
 const { RangePicker } = DatePicker;
 const FormItem = Form.Item;
@@ -90,13 +91,11 @@ export default class Home extends Component<UserProp, UserState> {
       params.startDate = moment(timeRang[0]).format('YYYY-MM-DD');
       params.endDate = moment(timeRang[1]).format('YYYY-MM-DD');
     }
-    this.props.history.replace({
-      query: {
-        pageNum: this.p.pageNum,
-        pageSize: this.p.pageSize,
-        startDate: params.startDate,
-        endDate: params.endDate,
-      }
+    saveUrlParams({
+      pageNum: this.p.pageNum,
+      pageSize: this.p.pageSize,
+      startDate: params.startDate,
+      endDate: params.endDate,
     })
     this.setState({ loading: true });
     let res = await teamFeeIncome(params);

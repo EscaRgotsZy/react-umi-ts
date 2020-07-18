@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import { handlePicUrl, getPageQuery } from '@/utils/utils';
+import { handlePicUrl, getPageQuery, saveUrlParams } from '@/utils/utils';
 import { Card, Form, Row, Col, Input, Table, Select, Button, Popconfirm, } from 'antd';
 import {
   limitsParams,
@@ -181,15 +181,13 @@ export default class limits extends Component<UserProp, UserState> {
       limitUserType,
       sortBy: '-createTime',
     };
-    this.props.history.replace({
-      query: {
-        pageNum,
-        pageSize,
-        key: this.state.currentTab,
-        productId,
-        limitType,
-        limitUserType,
-      }
+    saveUrlParams({
+      key: this.state.currentTab,
+      productId: params.productId,
+      limitType: params.limitType,
+      limitUserType: params.limitUserType,
+      pageNum: params.page,
+      pageSize: params.size,
     })
     this.setState({ loading: true });
     let res = await GetLimitsList(params);

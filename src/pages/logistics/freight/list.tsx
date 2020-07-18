@@ -4,7 +4,7 @@ import { Table, Card, Button, Popconfirm, } from 'antd';
 import moment from 'moment';
 import { Link } from 'umi'
 import { GetFreightParams, getFreightTemplates, delFreightTemplate } from '@/services/logistics/freight';
-
+import { saveUrlParams } from '@/utils/utils';
 interface UserProp {
 	history: any;
 	location: any;
@@ -48,14 +48,16 @@ const FreightList: React.FC<UserProp> = (props) => {
 	]
 	async function getDataList() {
 		let params: GetFreightParams = { page: pageInfo.page, size: pageInfo.size, sortBy: '-modifyTime' }
-		props.history.replace({
-      query: params
-    });
+		
 		setLoading(true)
 		let { total, records } = await getFreightTemplates(params)
 		setLoading(false);
 		setTotal(total);
 		setTableList(records);
+		saveUrlParams({
+			page: pageInfo.page,
+			size: pageInfo.size,
+		})
 	}
 	// 删除模板
 	async function del(record: any) {

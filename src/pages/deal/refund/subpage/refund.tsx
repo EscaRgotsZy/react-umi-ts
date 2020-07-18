@@ -9,7 +9,7 @@ import {
     getRefundList,
     postReceiveGoods,
 } from '@/services/deal/list';
-
+import { saveUrlParams } from '@/utils/utils';
 const FormItem = Form.Item;
 const { Option } = Select;
 const dealStatusList = ['待审核', '同意', '平台审核通过', '退款中', '退款完成', '商家待收货', '商家确认收货', '7', '8', '9', '10', '不同意', '退款失败', '卖家弃货', '待退货', '未收到货', '已收到货', '拼团自动退款'];
@@ -173,7 +173,14 @@ export default class preSale extends Component<UserProp, UserState> {
 
         let columns = this.getType() == 'goods' ? goodsColumns : detailsColumns;
         let { returnNo = '', orderNo = '', status = '' } = this.formRef.current.getFieldsValue();
-        this.props.history.push({ search: `key=${this.props.type}&pageSize=${this.state.pageSize}&pageNum=${this.state.pageNum}&returnNo=${returnNo}&orderNo=${orderNo}&status=${status}` })
+        saveUrlParams({
+            key: this.props.type,
+            returnNo: returnNo,
+            orderNo: orderNo,
+            status: status,
+            pageSize: this.state.pageSize,
+            pageNum: this.state.pageNum,
+        })
         status = status == -5 ? '' : status;
         let refundLimit = this.getType() == 'goods' ? 2 : 1;
 

@@ -11,7 +11,7 @@ import {
   getWaitWithdrawAmount,
   getTotalAmount,
 } from '@/services/rabate/detail';
-
+import { saveUrlParams } from '@/utils/utils'
 interface UserProp {
   history: any;
   location: any;
@@ -47,16 +47,15 @@ const RebateDetail: React.FC<UserProp> = (props) => {
       page: pageInfo.pageNum,
       size: pageInfo.pageSize,
     };
-    props.history.replace({
-      query: {
-        pageNum: pageInfo.pageNum,
-        pageSize: pageInfo.pageSize,
-      },
-    });
+    
     let { total, records } = await getDetail(params);
     setLoading(false);
     setTableList(records);
     setPageTotal(total);
+    saveUrlParams({
+      pageNum: pageInfo.pageNum,
+      pageSize: pageInfo.pageSize,
+    })
   }
 
   const columns = [

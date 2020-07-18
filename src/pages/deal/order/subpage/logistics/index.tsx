@@ -12,7 +12,7 @@ interface UserProp {
     location: any;
 }
 interface UserState {
-    orderNo: string | number,
+    orderNo: any,
     loading: boolean,
     logisticsData: any,
     orderLogistics: any,

@@ -13,6 +13,34 @@ export interface GetRoleParams {
   size: any;	        // 每页行数
   status?: any;
 }
+// 获取当前企业资源列表
+export async function getResourceLists() {
+  let [err, data] = await get({ baseUrl: config.controlService, url: `/control/company-resource/company`,  showToast: false });
+  if (err || !data) return [];
+  data = Array.isArray(data) ? data.map(item => {
+    item.key = item.resourceId;
+    item.title = item.resourceName;
+    item.value = item.resourceId;
+    item.icon = '';
+    item.children = Array.isArray(item.resources) ? item.resources.map((ele: any) => {
+      ele.key = ele.resourceId;
+      ele.title = ele.resourceName;
+      ele.value = ele.resourceId;
+      ele.icon = '';
+      return {
+        ...ele,
+        grade:2
+      }
+    }) : []
+    return {
+      ...item,
+      grade:1
+    }
+  }) : [];
+  return {
+    data
+  }
+}
 // 获取角色列表
 export async function getRoleLists(params?: GetRoleParams) {
   let [err, data] = await get({ baseUrl: config.controlService, url: `/control/role`, params, showToast: false });

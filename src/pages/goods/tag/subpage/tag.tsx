@@ -16,6 +16,7 @@ import {
   batchTagGroup,
   getTagItemInfo
 }from '@/services/goods/tag';
+import { saveUrlParams } from '@/utils/utils';
 const { Option } = Select;
 const FormItem = Form.Item;
 interface UserState {
@@ -38,7 +39,6 @@ interface UserState {
   tagInfoData: any,
 }
 interface UserProp  {
-  history: any;
 }
 export default class Tag extends Component<UserProp, UserState> {
   formRef: React.RefObject<any>;
@@ -110,14 +110,13 @@ export default class Tag extends Component<UserProp, UserState> {
       size: pageSize,
       sortBy: '-createTime',
     }
-    // this.props.history.replace({
-    //   query: {
-    //     pageNum,
-    //     pageSize,
-    //     groupId,
-    //     name
-    //   }
-    // })
+    saveUrlParams({
+      key: 1,
+      groupId: params.groupId,
+      name: params.name,    
+      pageNum: params.page, 
+      pageSize: params.size,                       
+    })
     this.setState({ loading: true });
     let res = await getTagList(params)
     this.setState({ loading: false })

@@ -1,9 +1,9 @@
 import { stringify } from 'querystring';
-import { history, Reducer, Effect, request, useModel } from 'umi';
+import { history, Reducer, Effect } from 'umi';
 import { goLogin, getUserInfo, getCompaniesInfo, getRouters } from '@/services/common';
 import { setAuthority } from '@/utils/authority';
 import { getPageQuery } from '@/utils/utils';
-import { DefaultCompany, tokenManage } from '@/constants/storageKey';
+import { tokenManage } from '@/constants/storageKey';
 
 export interface StateType {
   status?: 'ok' | 'error';
@@ -32,32 +32,13 @@ const Model: LoginModelType = {
   effects: {
     *login({ payload }, { call, put }) {
       try {
-        const response = yield call(goLogin, payload);
+        yield call(goLogin, payload);
         yield call(getCompaniesInfo);
         yield call(getUserInfo);
         yield put({
           type: 'changeLoginStatus',
           payload: 'ok',
         });
-        if (response) {
-
-          const urlParams = new URL(window.location.href);
-          const params = getPageQuery();
-          let { redirect } = params as { redirect: string };
-          if (redirect) {
-            const redirectUrlParams = new URL(redirect);
-            if (redirectUrlParams.origin === urlParams.origin) {
-              redirect = redirect.substr(urlParams.origin.length);
-              if (redirect.match(/^\/.*#/)) {
-                redirect = redirect.substr(redirect.indexOf('#') + 1);
-              }
-            } else {
-              window.location.href = '/';
-              return;
-            }
-          }
-          history.replace(redirect || '/');
-        }
       } catch (e) {
         console.log('错误异常--', e)
       }

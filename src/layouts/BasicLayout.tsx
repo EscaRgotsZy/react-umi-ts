@@ -78,8 +78,8 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
 
   const authorized = getAuthorityFromRouter(props.route.routes, location.pathname || '/') || {
     authority: undefined,
+    unaccessible: undefined,
   };
-
   const {
     route = {
       routes: [],
@@ -140,7 +140,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
           {...settings}
         >
           <ConfigProvider locale={zhCN}>
-            <Authorized authority={authorized!.authority} noMatch={noMatch}>
+            <Authorized authority={authorized!.unaccessible ? ['noAuthority']: ['admin']} noMatch={noMatch}>
               {children}
             </Authorized>
           </ConfigProvider>

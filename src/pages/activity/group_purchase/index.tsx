@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useMemo, useRef} from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { Card } from 'antd'
 import List from './components/index-list'
@@ -33,15 +33,23 @@ interface UserProp {
 }
 const GroupActivity: React.FC<UserProp> = (props) => {
   let { status = '2' } = props.location.query;
+  const listRef:any = useRef(null)
   let [tabIndex, setTabIndex] = useState<string>(status);
+
+  const child = useMemo(() => <List ref={listRef} status={tabIndex}/>, [tabIndex]);
+
+  function onTabChange(e:string){
+    listRef!.current!.resetPage()
+    setTabIndex(e)
+  }
   return (
     <PageHeaderWrapper
       tabActiveKey={tabIndex}
-      onTabChange={setTabIndex}
+      onTabChange={onTabChange}
       tabList={tabList}
       >
       <Card>
-        <List status={tabIndex}/>
+        { child }
       </Card>
     </PageHeaderWrapper>
   )

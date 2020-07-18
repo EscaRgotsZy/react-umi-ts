@@ -9,6 +9,7 @@ const { Option } = Select;
 const proTypeList = ['', '现金券'];
 const applyList = ['', '成功', '失败'];
 import { getPageQuery } from '@/common/utils';
+import { saveUrlParams } from '@/utils/utils';
 import { SearchOutlined, ReloadOutlined, } from '@ant-design/icons';
 import {
     getGrantRecord,
@@ -18,7 +19,7 @@ interface UserProp {
 }
 interface UserState {
     searchParams: any,
-    grantRecordId: number | string,
+    grantRecordId: any,
     pageInfo: any,
     total: number | string,
     loading: boolean,
@@ -118,7 +119,15 @@ export default class GrantRecord extends Component<UserProp, UserState> {
         if (cellphone) query.cellphone = cellphone.trim();
         if (realName) query.realName = realName.trim();
         if (status) query.status = status;
-        this.props.history.push({ search: `current=2&grantRecordId=${grantRecordId}&cellphone=${query.cellphone || ''}&realName=${query.realName || ''}&status=${status ? status : '-1'}&pageNum=${query.page || 1}&pageSize=${query.size || 30}` })
+        saveUrlParams({
+             current: 2,
+             grantRecordId: query.grantRecordId,
+             cellphone: query.cellphone,
+             realName: query.realName,
+             status: query.status,
+             pageNum: query.page,
+             pageSize: query.size,
+        })
         return query
     }
     reset = () => {

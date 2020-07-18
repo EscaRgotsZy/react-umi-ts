@@ -8,6 +8,7 @@ import CopyToClipboard from 'react-copy-to-clipboard';
 import config from '@/config';
 import { getMembers, MembersParams, getRelativesList, getInviteCode, batchTagsParams, batchTags } from '@/services/customer/list';
 import { getAllTagList }from '@/services/customer/tag';
+import { saveUrlParams } from '@/utils/utils'
 const { Option } = Select;
 const FormItem = Form.Item;
 interface UserState {
@@ -142,16 +143,14 @@ export default class CustomerManage extends Component<UserProp, UserState> {
       size: pageSize,
       sortBy: '-createTime',
     }
-    this.props.history.replace({
-      query: {
-        pageNum,
-        pageSize,
-        cellphone,
-        employeeName,
-        memberType,
-        nickName,
-        tagName
-      }
+    saveUrlParams({
+      pageNum: this.state.pageNum,
+      pageSize: this.state.pageSize,
+      cellphone: params.cellphone,
+      employeeName: params.realName,
+      memberType: params.memberType,
+      nickName: params.nickName,
+      tagName: params.tagName
     })
     this.setState({ loading: true });
     let res = await getMembers(params)

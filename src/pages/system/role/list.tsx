@@ -4,7 +4,7 @@ import { Table, Card, Button, Popconfirm, Divider, Modal, Form, Row, Col, Input,
 import TextArea from 'antd/lib/input/TextArea';
 import { SearchOutlined, SyncOutlined } from '@ant-design/icons';
 import MenuPermissions from '@/components/Authorized/MenuPermissions';
-import { getPageQuery } from '@/utils/utils';
+import { getPageQuery, saveUrlParams } from '@/utils/utils';
 import { GetRoleParams, getRoleLists, delRole, saveRole, putRole, getRoleInfo } from '@/services/system/role';
 
 interface UserProp {
@@ -106,14 +106,16 @@ const RoleList: React.FC<UserProp> = (props) => {
   async function getDataList() {
     let roleName = headFormRef.current && headFormRef.current.getFieldValue().roleName;
     let params: GetRoleParams = { page: pageInfo.page, size: pageInfo.size,roleName }
-    props.history.replace({
-      query: params,
-    });
     setLoading(true)
     let { total, records } = await getRoleLists(params)
     setLoading(false);
     setTotal(total);
     setTableList(records);
+    saveUrlParams({
+      roleName: params.roleName,
+      page: params.page, 
+      size: params.size,
+    })
   }
   // 查询角色信息
   async function getRoleDetail(record:any) {
@@ -197,7 +199,7 @@ const RoleList: React.FC<UserProp> = (props) => {
         <div>{renderForm()}</div>
         <Button type="primary" style={{ margin: "10px 0" }} onClick={() => editRole('')}>新增角色</Button>
         <Table
-          rowKey={record => record.id}
+          rowKey={record => record.roleId}
           loading={loading}
           columns={columns}
           dataSource={tableList}

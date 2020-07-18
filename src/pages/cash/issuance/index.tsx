@@ -14,7 +14,7 @@ interface UserProp {
 }
 interface UserState {
     cashTotal: any,
-    current: number | string,
+    current: any,
 }
 export default class Issuance extends Component<UserProp, UserState> {
     constructor(props:UserProp) {
@@ -28,6 +28,7 @@ export default class Issuance extends Component<UserProp, UserState> {
     componentDidMount() {
         this.getDataTotal()
     }
+    
     getDataTotal = async () => {
         let res = await getAccountTotal();
         this.setState({ cashTotal: res })

@@ -23,12 +23,7 @@ const Aftermarket:React.FC<any> = (props) => {
       size: pageInfo.pageSize
     }
     setLoading(true)
-    props.history.replace({
-      query: {
-        pageNum: pageInfo.pageNum,
-        pageSize: pageInfo.pageSize,
-      },
-    });
+    
     let res = await getAfterSaleList(params)
     setLoading(false)
     let { records, total } = res;
@@ -40,6 +35,12 @@ const Aftermarket:React.FC<any> = (props) => {
     }) : []
     setList(list)
     setPageTotal(total)
+    props.history.replace({
+      query: {
+        pageNum: pageInfo.pageNum,
+        pageSize: pageInfo.pageSize,
+      },
+    });
   }
   // 监听分页改变
   function onTableChange({ current, pageSize }: any) {

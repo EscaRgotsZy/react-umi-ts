@@ -13,7 +13,8 @@ import {
 } from '@/services/deal/order';
 import { SearchOutlined, ReloadOutlined, DownloadOutlined } from '@ant-design/icons';
 import { handlePicUrl, getPageQuery } from '@/common/utils';
-import config from '@/config/index'
+import config from '@/config/index';
+import { saveUrlParams } from '@/utils/utils';
 import TextArea from 'antd/lib/input/TextArea';
 const { RangePicker } = DatePicker;
 const { Option } = Select;
@@ -145,7 +146,7 @@ export default class OrderManage extends Component<UserProp, UserState> {
       orderFields: [],//自定义导出参数
       batchOrderList: [], //批量发货 orderNo集合
       currentTab: searchParams.key || '-1',
-      searchParams: {},
+      searchParams,
       pageInfo: {
         pageSize: searchParams.pageSize ? +searchParams.pageSize : 10,
         pageNum: searchParams.pageNum ? +searchParams.pageNum : 1,
@@ -172,50 +173,84 @@ export default class OrderManage extends Component<UserProp, UserState> {
   }
   currentTab: any = '';
   componentDidMount() {
-    let { startTime = '', endTime = '', payStartDate = '', payEndDate = '', bizType = '', refundStatus = '', remarkStatus = '', shopName = '', orderNo = '', groupOrderNo = '', employeeName = '', realname = '', phone = '', } = this.state.searchParams;
-    if (startTime) {
-      this.formRef.current.setFieldsValue({ orderTime: [moment(startTime, 'YYYY-MM-DD HH:mm:ss'), moment(endTime, 'YYYY-MM-DD HH:mm:ss')] }, this.getDataList);
+    let {key='', startTime = '', endTime = '', payStartDate = '', payEndDate = '', bizType = '', refundStatus = '', remarkStatus = '', shopName = '',orderNo='', groupOrderNo='', employeeName='',realname='',phone=''} = this.state.searchParams;
+    if ( key || startTime || endTime || payStartDate || payEndDate || bizType || refundStatus || remarkStatus || shopName || orderNo || groupOrderNo || employeeName || realname || phone) {
+      if(orderNo){
+        this.formRef.current.setFieldsValue({ 
+          orderTime: (startTime || endTime)?[moment(startTime), moment(endTime)]:'',
+          payTime: (payStartDate || payEndDate)?[moment(payStartDate), moment(payEndDate)] : '',
+          bizType,
+          refundStatus,
+          remarkStatus,
+          shopName,
+          orderSearch: 'orderNo',
+          searchValue: orderNo
+        })
+      }else if(groupOrderNo){
+        this.formRef.current.setFieldsValue({ 
+          orderTime: (startTime || endTime)?[moment(startTime), moment(endTime)]:'',
+          payTime: (payStartDate || payEndDate)?[moment(payStartDate), moment(payEndDate)] : '',
+          bizType,
+          refundStatus,
+          remarkStatus,
+          shopName,
+          orderSearch: 'groupOrderNo',
+          searchValue: groupOrderNo
+        })
+      }else if(employeeName){
+        this.formRef.current.setFieldsValue({ 
+          orderTime: (startTime || endTime)?[moment(startTime), moment(endTime)]:'',
+          payTime: (payStartDate || payEndDate)?[moment(payStartDate), moment(payEndDate)] : '',
+          bizType,
+          refundStatus,
+          remarkStatus,
+          shopName,
+          orderSearch: 'employeeName',
+          searchValue: employeeName
+        })
+      }else if(realname){
+        this.formRef.current.setFieldsValue({ 
+          orderTime: (startTime || endTime)?[moment(startTime), moment(endTime)]:'',
+          payTime: (payStartDate || payEndDate)?[moment(payStartDate), moment(payEndDate)] : '',
+          bizType,
+          refundStatus,
+          remarkStatus,
+          shopName,
+          orderSearch: 'realname',
+          searchValue: realname
+        })
+      }else if(phone){
+        this.formRef.current.setFieldsValue({ 
+          orderTime: (startTime || endTime)?[moment(startTime), moment(endTime)]:'',
+          payTime: (payStartDate || payEndDate)?[moment(payStartDate), moment(payEndDate)] : '',
+          bizType,
+          refundStatus,
+          remarkStatus,
+          shopName,
+          orderSearch: 'phone',
+          searchValue: phone
+        })
+      }else{
+        this.formRef.current.setFieldsValue({ 
+          orderTime: (startTime || endTime)?[moment(startTime), moment(endTime)]:'',
+          payTime: (payStartDate || payEndDate)?[moment(payStartDate), moment(payEndDate)] : '',
+          bizType,
+          refundStatus,
+          remarkStatus,
+          shopName,
+        })
+      };
+      this.currentTab = key;
       this.setState({
         startTime,
-        endTime
-      })
-    }
-    if (payStartDate) {
-      this.formRef.current.setFieldsValue({ payTime: [moment(payStartDate, 'YYYY-MM-DD HH:mm:ss'), moment(payEndDate, 'YYYY-MM-DD HH:mm:ss')] }, this.getDataList);
-      this.setState({
+        endTime,
         payStartDate,
-        payEndDate
+        payEndDate,
+      },()=>{
+        this.getDataList()
       })
-    }
-    if (bizType) {
-      this.formRef.current.setFieldsValue({ bizType }, this.getDataList);
-    }
-    if (refundStatus) {
-      this.formRef.current.setFieldsValue({ refundStatus }, this.getDataList);
-    }
-    if (remarkStatus) {
-      this.formRef.current.setFieldsValue({ remarkStatus }, this.getDataList);
-    }
-    if (shopName) {
-      this.formRef.current.setFieldsValue({ shopName }, this.getDataList);
-    }
-    if (orderNo) {
-      this.formRef.current.setFieldsValue({ orderSearch: 'orderNo', searchValue: orderNo }, this.getDataList);
-    }
-    if (groupOrderNo) {
-      this.formRef.current.setFieldsValue({ orderSearch: 'groupOrderNo', searchValue: groupOrderNo }, this.getDataList);
-    }
-    if (employeeName) {
-      this.formRef.current.setFieldsValue({ orderSearch: 'employeeName', searchValue: employeeName }, this.getDataList);
-    }
-    if (realname) {
-      this.formRef.current.setFieldsValue({ orderSearch: 'realname', searchValue: realname }, this.getDataList);
-    }
-    if (phone) {
-      this.formRef.current.setFieldsValue({ orderSearch: 'phone', searchValue: phone }, this.getDataList);
-    }
-    if (!startTime && !endTime && !payStartDate && !payEndDate && !bizType && !refundStatus && !remarkStatus && !shopName && !orderNo && !groupOrderNo && !employeeName && !realname && !phone) {
-      this.getDataList()
+    } else {
+      this.getDataList();
     }
     this.getLogistics();
   }
@@ -235,7 +270,6 @@ export default class OrderManage extends Component<UserProp, UserState> {
     let page = pageInfo.pageNum;
     let { startTime, endTime, payStartDate, payEndDate } = this.state;
     let { bizType, orderSearch, searchValue, refundStatus, remarkStatus, shopName, } = this.formRef.current.getFieldsValue();
-    //  orderNo, groupOrderNo, employeeName, realname, phone,
     let orderStatus = this.currentTab == '-1' ? '' : this.currentTab;
     let params: any = {
       orderStatus,
@@ -253,22 +287,34 @@ export default class OrderManage extends Component<UserProp, UserState> {
     }
     if (orderSearch == 'orderNo') {
       params.orderNo = searchValue && searchValue.trim() || undefined;
-      this.props.history.push({ search: `key=${this.currentTab}&orderStatus=${orderStatus}&bizType=${bizType || ''}&orderNo=${searchValue || ''}&refundStatus=${refundStatus || ''}&remarkStatus=${remarkStatus || ''}&shopName=${shopName || ''}&startTime=${startTime || ''}&endTime=${endTime || ''}&payStartDate=${payStartDate || ''}&payEndDate=${payEndDate || ''}&pageNum=${page}&pageSize=${size}` })
-    } else if (orderSearch == 'groupOrderNo') {
+    } else if(orderSearch == 'groupOrderNo'){
       params.groupOrderNo = searchValue && searchValue.trim() || undefined;
-      this.props.history.push({ search: `key=${this.currentTab}&orderStatus=${orderStatus}&bizType=${bizType || ''}&groupOrderNo=${searchValue || ''}&refundStatus=${refundStatus || ''}&remarkStatus=${remarkStatus || ''}&shopName=${shopName || ''}&startTime=${startTime || ''}&endTime=${endTime || ''}&payStartDate=${payStartDate || ''}&payEndDate=${payEndDate || ''}&pageNum=${page}&pageSize=${size}` })
-    } else if (orderSearch == 'employeeName') {
-      params.employeeName = searchValue;
-      this.props.history.push({ search: `key=${this.currentTab}&orderStatus=${orderStatus}&bizType=${bizType || ''}&employeeName=${searchValue || ''}&refundStatus=${refundStatus || ''}&remarkStatus=${remarkStatus || ''}&shopName=${shopName || ''}&startTime=${startTime || ''}&endTime=${endTime || ''}&payStartDate=${payStartDate || ''}&payEndDate=${payEndDate || ''}&pageNum=${page}&pageSize=${size}` })
-    } else if (orderSearch == 'realname') {
-      params.realname = searchValue;
-      this.props.history.push({ search: `key=${this.currentTab}&orderStatus=${orderStatus}&bizType=${bizType || ''}&realname=${searchValue || ''}&refundStatus=${refundStatus || ''}&remarkStatus=${remarkStatus || ''}&shopName=${shopName || ''}&startTime=${startTime || ''}&endTime=${endTime || ''}&payStartDate=${payStartDate || ''}&payEndDate=${payEndDate || ''}&pageNum=${page}&pageSize=${size}` })
-    } else if (orderSearch == 'phone') {
-      params.phone = searchValue;
-      this.props.history.push({ search: `key=${this.currentTab}&orderStatus=${orderStatus}&bizType=${bizType || ''}&phone=${searchValue || ''}&refundStatus=${refundStatus || ''}&remarkStatus=${remarkStatus || ''}&shopName=${shopName || ''}&startTime=${startTime || ''}&endTime=${endTime || ''}&payStartDate=${payStartDate || ''}&payEndDate=${payEndDate || ''}&pageNum=${page}&pageSize=${size}` })
+    } else if(orderSearch == 'employeeName'){
+      params.employeeName = searchValue && searchValue.trim() || undefined;
+    } else if(orderSearch == 'realname'){
+      params.realname = searchValue && searchValue.trim() || undefined;
     } else {
-      this.props.history.push({ search: `key=${this.currentTab}&orderStatus=${orderStatus}&bizType=${bizType || ''}&refundStatus=${refundStatus || ''}&remarkStatus=${remarkStatus || ''}&shopName=${shopName || ''}&startTime=${startTime || ''}&endTime=${endTime || ''}&payStartDate=${payStartDate || ''}&payEndDate=${payEndDate || ''}&pageNum=${page}&pageSize=${size}` })
+      params.phone = searchValue && searchValue.trim() || undefined;
     }
+    saveUrlParams({
+      key: this.currentTab,
+      orderStatus: params.orderStatus,    
+      bizType: params.bizType, 
+      orderNo: params.orderNo,
+      groupOrderNo: params.groupOrderNo,
+      employeeName: params.employeeName,
+      realname: params.realname,
+      phone: params.phone,
+      refundStatus: params.refundStatus,
+      remarkStatus: params.remarkStatus,
+      shopName: params.shopName,
+      startTime: params.startTime,
+      endTime: params.endTime,
+      payStartDate: params.payStartDate,
+      payEndDate: params.payEndDate,
+      pageNum: params.page, 
+      pageSize: params.size,                       
+    })
     this.setState({ loading: true });
     let res: any = await getOrdersList(params);
     this.setState({ loading: false })
@@ -283,29 +329,21 @@ export default class OrderManage extends Component<UserProp, UserState> {
       total: data && data.total || 0
     })
   }
-  // 搜索
-  query = () => {
-    this.setState({
-      pageInfo: {
-        pageNum: 1,
-        pageSize: 10,
-      }
-    }, () => {
-      this.getDataList();
-    })
-
-  }
   // 重置
   reset = () => {
-    this.formRef.current.resetFields();
     this.setState({
       pageInfo: {
         pageNum: 1,
         pageSize: 10,
-      }
-    }, () => {
+      },
+      startTime: '',
+      endTime: '',
+      payStartDate: '',
+      payEndDate: ''
+    },() => {
       this.getDataList();
     })
+    this.formRef.current.resetFields();
   }
   //打开自定义盒子
   openDrawer = () => {
@@ -597,9 +635,7 @@ export default class OrderManage extends Component<UserProp, UserState> {
               <Col style={{ margin: '10px 0' }}>
                 <Form.Item label="下单时间：" name='orderTime'>
                   <RangePicker
-                    showTime={{
-                      defaultValue: [moment('00:00:00', 'HH:mm:ss'), moment('23:59:59', 'HH:mm:ss')],
-                    }}
+                    showTime={{ format: 'HH:mm:ss' }}
                     onChange={this.checkOrderDate}
                     format="YYYY-MM-DD HH:mm:ss"
                   />
@@ -608,9 +644,7 @@ export default class OrderManage extends Component<UserProp, UserState> {
               <Col style={{ margin: '10px 0' }}>
                 <Form.Item label="付款时间：" name='payTime' >
                   <RangePicker
-                    showTime={{
-                      defaultValue: [moment('00:00:00', 'HH:mm:ss'), moment('23:59:59', 'HH:mm:ss')],
-                    }}
+                    showTime={{ format: 'HH:mm:ss' }}
                     onChange={this.checkPayDate}
                     format="YYYY-MM-DD HH:mm:ss"
                   />
@@ -659,7 +693,7 @@ export default class OrderManage extends Component<UserProp, UserState> {
           </Col>
           <Col md={6} sm={6} >
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
-              <Button type="primary" style={{ width: '100px' }} onClick={this.query} icon={<SearchOutlined />} >{' '}搜索{' '}</Button>
+              <Button type="primary" style={{ width: '100px' }} onClick={this.getDataList} icon={<SearchOutlined />} >{' '}搜索{' '}</Button>
               <Button type="primary" style={{ margin: '12px 0', width: '100px' }} onClick={this.reset} icon={<ReloadOutlined />}>{' '}重置{' '}</Button>
               <Button type="primary" style={{ width: '100px' }} onClick={this.handleExport} loading={this.state.downloadLoading} icon={<DownloadOutlined />}>{' '}导出{' '}</Button>
               <Button type="primary" style={{ margin: '12px 0', width: '100px' }} onClick={this.openDrawer}>{' '}自定义导出{' '}</Button>

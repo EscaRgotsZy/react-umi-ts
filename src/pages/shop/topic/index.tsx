@@ -36,17 +36,18 @@ const Topic:React.FC<PropsParams> = (props) => {
       sortBy: '-createTime'
     }
     setLoading(true)
+    
+    let res = await getSpecialList(params)
+    setLoading(false)
+    let { records, total } = res;
+    setList(records)
+    setPageTotal(total)
     props.history.replace({
       query: {
         pageNum: pageInfo.pageNum,
         pageSize: pageInfo.pageSize,
       },
     });
-    let res = await getSpecialList(params)
-    setLoading(false)
-    let { records, total } = res;
-    setList(records)
-    setPageTotal(total)
   }
 
   // 删除

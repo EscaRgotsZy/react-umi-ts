@@ -7,7 +7,7 @@ import {
   onLineAssemble,
   offOrDelAssemble,
 } from '@/services/activity/assemble';
-import { handlePicUrl, getPageQuery } from '@/utils/utils';
+import { handlePicUrl, getPageQuery, saveUrlParams } from '@/utils/utils';
 interface UserState {
   searchUrl: any,
   loading: boolean,
@@ -490,17 +490,15 @@ export default class preSale extends Component<UserProp, UserState> {
       limitType,
       limitUserType,
     };
-    this.props.history.replace({
-      query: {
-        pageNum: this.state.pageNum,
-        pageSize: this.state.pageSize,
-        key: this.state.currentTab,
-        productId,
-        mergeName,
-        mergeType,
-        limitType,
-        limitUserType,
-      }
+    saveUrlParams({
+      pageNum: this.state.pageNum,
+      pageSize: this.state.pageSize,
+      key: this.state.currentTab,
+      productId: params.productId,
+      mergeName: params.mergeName,
+      mergeType: params.mergeType,
+      limitType: params.limitType,
+      limitUserType: params.limitUserType,
     })
     this.setState({ loading: true });
     let res = await GetAssembleList(params);

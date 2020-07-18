@@ -3,7 +3,7 @@ import React, { useEffect, useState,  } from 'react';
 import { Drawer, Tree, Button, message } from 'antd'
 import {
   getResourceLists,
-} from '@/services/system/resource';
+} from '@/services/system/role';
 interface UserProp {
   checkRoleData:any;
   roleKeys:any;
@@ -23,8 +23,8 @@ const MenuPermissions: React.FC<UserProp> = (props) => {
     setSelectedKeys(props.roleKeys)
   }, [props])
   async function getRoutersList() {
-    let res = await getResourceLists({parentId:0,page:1,size:100});
-    setTreeData(res.records)
+    let res:any = await getResourceLists();
+    setTreeData(res.data)
   }
   function onSelect(selectedKeys:any, e:any){
     setSelectedKeys(selectedKeys)

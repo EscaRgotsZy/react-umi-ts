@@ -9,7 +9,7 @@ import { EditOutlined } from '@ant-design/icons'
 import { getRenovation, copyRenovation, publishRenovation, delRenovation, RenovationParams, cancelDecorationPage } from '@/services/shop/renovation'
 import EditLayer from './components/edit-layer'
 import Preview from './components/preview'
-
+import { saveUrlParams } from '@/utils/utils';
 const { Search } = Input
 const { Option } = Select;
 
@@ -86,9 +86,7 @@ const Renovation: React.FC<RenovationProps> = (props) => {
       params.status = status
     }
 
-    props.history.replace({
-      query: params
-    });
+    
 
     setLoading(true)
     let res = await getRenovation(params);
@@ -96,6 +94,12 @@ const Renovation: React.FC<RenovationProps> = (props) => {
     let { total, records } = res;
     setPageTotal(total)
     setList(records)
+    saveUrlParams({
+      page: params.page,
+      size: params.size,
+      pageType: params.pageType,
+      title: params.title,
+    })
   }
 
   async function handlePublish(id:number):Promise<false | void>{

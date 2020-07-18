@@ -14,7 +14,7 @@ interface UserProp {
     location: any;
 }
 interface UserState {
-    orderNo: string | number,
+    orderNo: any,
     orderDetailInfos: any,
     prodData: any,
     subOrderList: Array<any>,

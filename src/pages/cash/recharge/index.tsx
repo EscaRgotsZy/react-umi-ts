@@ -51,7 +51,7 @@ export default class OrderDetail extends Component<UserProp, UserState> {
                             <Button type='primary' className={styles.btnRecharge} onClick={() => this.props.history.push(`/cash/recharge/setting?cashTotal=${cashTotal}`)}>充值现金券</Button>
                         </TabPane>
                         <TabPane tab="充值记录" key="2">
-                            <ReChargeList history={this.props.history} />
+                            <ReChargeList />
                         </TabPane>
                     </Tabs>
                 </Card>

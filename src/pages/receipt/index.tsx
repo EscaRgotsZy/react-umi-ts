@@ -65,6 +65,12 @@ const Receipt: React.FC<UserProp> = (props) => {
     if (tabIndex !== '-1') {
       params.hasInvoice = +tabIndex;
     }
+    
+    setLoading(true);
+    let { total, records } = await findSubByPage(params);
+    setLoading(false);
+    setTableList(records);
+    setPageTotal(total);
     props.history.replace({
       query: {
         key: tabIndex,
@@ -72,11 +78,6 @@ const Receipt: React.FC<UserProp> = (props) => {
         pageSize: pageInfo.pageSize,
       },
     });
-    setLoading(true);
-    let { total, records } = await findSubByPage(params);
-    setLoading(false);
-    setTableList(records);
-    setPageTotal(total);
   }
   // 发票抬头
   async function getTitle(): Promise<void | false> {

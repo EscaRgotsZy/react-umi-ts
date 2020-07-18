@@ -1,4 +1,5 @@
 import { get, post } from '@/common/request';
+import routerDynamicMenuKey from '@/menuKey'
 import { tokenManage, userCompaniesManage, userInfoManage, defaultRouters } from '@/constants/storageKey';
 import config from '@/config/index';
 export const BatchImport: string = `${config.server}/employees/batch-import`;
@@ -63,10 +64,17 @@ export async function getUserInfo() {
   return true
 }
 // 当前路由权限
-export async function getRouters(ID?:any) {
+export async function getRouters() {
   let [err, data] = await get({ baseUrl: config.controlService, url: `/control/resource/user`, showToast: false });
   if (!err && data) {
-    data = Array.isArray(data) ? data.map(item => item.menuKey) : [];
+    data = Array.isArray(data) ? data.map((item: any) => {
+      return {
+        ...item,
+        path: item.url,
+        exact: true,
+        component: routerDynamicMenuKey[item.menuKey],
+      }
+    }) : [];
     return data
   } else {
     return []

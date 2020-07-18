@@ -78,7 +78,7 @@ export default class InvoiceInfo extends Component<UserProp, UserState> {
     }
     checkInvoice = (flag: boolean) => {
         this.setState({ flag },()=>this.getInvoiceList());
-        
+
     }
     refresh = () => {
         this.invoiceRef.current.resetFields(['invoiceTitle']);
@@ -112,7 +112,7 @@ export default class InvoiceInfo extends Component<UserProp, UserState> {
     // 新增发票
     toBeNewInvoice:any = () => {
         /*  c == close 新增成功后关闭页面 */
-        window.open("/#/cashCoupon_manage/add_invoiceTitle?c=1", '_blank');
+        window.open("/#/cash/invoice_records/add_invoice_title?c=1", '_blank');
     }
     render() {
         const { flag, invoiceTitleList, invoiceTitleInfo, pageInfo, total, invoiceLoading, confirmInfo } = this.state;
@@ -211,7 +211,7 @@ export default class InvoiceInfo extends Component<UserProp, UserState> {
                         pagination={pagination}
                         loading={invoiceLoading}
                     />
-                    <Button onClick={() => this.toBeNewInvoice()}><a href='/#/cashCoupon_manage/add_invoiceTitle?c=1'  title="新增发票抬头" target="_blank">新增发票抬头</a></Button>
+                    <Button onClick={() => this.toBeNewInvoice()}><a href='/#/cash/invoice_records/add_invoice_title?c=1'  title="新增发票抬头" target="_blank">新增发票抬头</a></Button>
                 </Modal>
             </Card>
         )

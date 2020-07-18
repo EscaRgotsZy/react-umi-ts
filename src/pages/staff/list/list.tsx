@@ -38,7 +38,7 @@ import {
   batchDeleteEmployees,
 } from '@/services/staff/staff';
 import { BatchImport } from '@/services/common'
-
+import { saveUrlParams } from '@/utils/utils'
 
 const { Option } = Select;
 const FormItem = Form.Item;
@@ -200,16 +200,13 @@ export default class StaffManage extends Component<UserProp, UserState> {
       size: this.state.pageSize,
       sortBy: '-createTime',
     };
-
-    this.props.history.replace({
-      query: {
-        pageNum: this.state.pageNum,
-        pageSize: this.state.pageSize,
-        bizType,
-        realName,
-        deptPositionId,
-        employeeStatus
-      }
+    saveUrlParams({
+      pageNum: this.state.pageNum,
+      pageSize: this.state.pageSize,
+      bizType: params.bizType,
+      realName: params.realName,
+      deptPositionId: params.deptPositionId,
+      employeeStatus: params.employeeStatus
     })
     this.setState({ loading: true });
     let res = await getEmployee(params);

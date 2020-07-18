@@ -5,6 +5,7 @@ import { message } from 'antd'
 import config from '@/config';
 import moment from 'moment';
 import { tokenManage } from '@/constants/storageKey';
+import QS from 'qs'
 
 /* eslint no-useless-escape:0 import/prefer-default-export:0 */
 const reg = /(((^https?:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+(?::\d+)?|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)$/;
@@ -207,4 +208,16 @@ export function formatMoney(num: any, point = 0) {
   let str = num * 1 ? (num * 1).toFixed(point) : (0).toFixed(point)
   let re = `\\d(?=(\\d{3})+${point > 0 ? '\\.' : '$'})`
   return str.replace(new RegExp(re, 'g'), $0 => $0 + ',')
+}
+
+
+/**
+ * 保存 参数到url上面
+ * data 请求参数
+ */
+export function saveUrlParams(data = {}){
+  let query:string = QS.stringify(data);
+  let hash:any = location.hash || '';
+  hash =  hash.split('?')[0] || 'hash'
+  window.history.replaceState('', '', `${hash}?${query}`);
 }

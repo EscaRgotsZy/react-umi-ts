@@ -24,7 +24,6 @@ export default class BillSetting extends Component<UserProp, UserState> {
     this.formRef = React.createRef();
       this.state = {
         loading: false,
-        // c: this.props.match.params.c,
         c: getPageQuery().c || '',
         typeId: '',
       }

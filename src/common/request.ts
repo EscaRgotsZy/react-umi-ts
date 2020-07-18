@@ -24,6 +24,7 @@ axios.interceptors.request.use(
 axios.interceptors.response.use(
   (response) => {
     if (response.data.code === 401) {
+      tokenManage.clear()
       history.push('/user/login');
       return;
     }

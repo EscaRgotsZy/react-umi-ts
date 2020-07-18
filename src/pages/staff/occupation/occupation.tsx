@@ -8,7 +8,7 @@ import {
   AddDeptPositionsParams,
   delDeptPositions,
 } from '@/services/staff/occupation';
-
+import { saveUrlParams } from '@/utils/utils'
 const { Search } = Input;
 const FormItem = Form.Item;
 
@@ -89,11 +89,9 @@ export default class occupationManage extends Component<UserProp, UserState> {
       page: pageNum,
       size: pageSize,
     };
-    this.props.history.replace({
-      query: {
-        pageNum,
-        pageSize,
-      }
+    saveUrlParams({
+      pageNum: this.state.pageNum,
+      pageSize: this.state.pageSize,
     })
     let res = await deptPositions(params);
     if (!res) return false;

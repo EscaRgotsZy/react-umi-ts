@@ -4,6 +4,7 @@ import { Table, Card, Button, Popconfirm, Divider, Modal, Form, Row, Col, Input,
 import { SearchOutlined, DownOutlined } from '@ant-design/icons';
 import TextArea from 'antd/lib/input/TextArea';
 import moment from 'moment';
+import { saveUrlParams } from '@/utils/utils';
 import { GetResourceParams, getResourceLists, putResource, delResource, saveResource } from '@/services/system/resource';
 interface UserProp {
   history: any;
@@ -90,15 +91,22 @@ const ResourceList: React.FC<UserProp> = (props) => {
     if (parentId + '') {
       params.parentId = 0
     }
-    props.history.replace({
-      query: params,
-      resourceName,
-    });
+    
     setLoading(true)
     let { total, records } = await getResourceLists(params)
     setLoading(false);
     setTotal(total);
     setTableList(records);
+    saveUrlParams({
+      page: params.page, 
+      size: params.size,
+      parentId: params.parentId,
+      resourceName,
+    })
+    // props.history.replace({
+    //   query: params,
+    //   resourceName,
+    // });
   }
 
   // 删除菜单

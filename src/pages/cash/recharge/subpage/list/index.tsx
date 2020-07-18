@@ -7,7 +7,7 @@ import { getPageQuery } from '@/common/utils';
 import {
     getReChargeRecordList, revokeApply,
 } from '@/services/cash/recharge';
-
+import { saveUrlParams } from '@/utils/utils'
 
 const FormItem = Form.Item;
 const { RangePicker } = DatePicker;
@@ -17,7 +17,7 @@ const couponTypeList = ['未知', '银行转账', '支票', '现金'];
 const applyList = ['未知', '处理中', '等待充值', '充值成功', '已取消', '退款完成'];
 
 interface UserProp {
-    history: any;
+    // history: any;
 }
 interface UserState {
     searchParams: any,
@@ -105,7 +105,7 @@ export default class ReChargeList extends Component<UserProp, UserState> {
     ]
     toRecordInfo = (record: any) => {
         let { id } = record;
-        this.props.history.push(`/cash/charge/info?reChargeId=${id}`);
+        return `#/cash/recharge/info?reChargeId=${id}`
     }
     revoke = async (record: any) => {
         let { id } = record;
@@ -114,7 +114,8 @@ export default class ReChargeList extends Component<UserProp, UserState> {
         this.getDataList();
     }
     componentDidMount() {
-        let { searchParams: { startTime, endTime, }, orderStatus } = this.state;
+        // let { searchParams: { startTime, endTime, }, orderStatus } = this.state;
+        let { startTime, endTime, orderStatus } = this.state.searchParams;
         if (startTime || endTime || orderStatus) {
             this.formRef.current.setFieldsValue({
                 orderStatus
@@ -139,7 +140,14 @@ export default class ReChargeList extends Component<UserProp, UserState> {
         if (startTime) query.startTime = startTime;
         if (endTime) query.endTime = endTime;
         if (orderStatus) query.orderStatus = orderStatus;
-        this.props.history.push({ search: `current=2&startTime=${query.startTime || ''}&endTime=${query.endTime || ''}&orderStatus=${query.orderStatus}&pageNum=${query.page || 1}&pageSize=${query.size || 10}` })
+        saveUrlParams({
+            current: 2,
+            orderStatus: query.orderStatus,
+            startTime: query.startTime,
+            endTime: query.endTime,
+            pageNum: this.state.pageInfo.pageNum,
+            pageSize: this.state.pageInfo.pageSize,
+        })
         return query
     }
     getDataList = async () => {

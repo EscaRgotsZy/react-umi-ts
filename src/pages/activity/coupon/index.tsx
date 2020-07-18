@@ -55,7 +55,7 @@ export default class cashCouponManage extends Component<UserProp, UserState> {
         />
         <div style={{ marginTop: '30px' }}>
           {
-            currentTab == '1' ? <Coupon history={this.props.history} /> : <AddCoupon history={this.props.history} tabChange={this.tabChange} />
+            currentTab == '1' ? <Coupon/> : <AddCoupon history={this.props.history} tabChange={this.tabChange} />
           }
         </div>
       </>

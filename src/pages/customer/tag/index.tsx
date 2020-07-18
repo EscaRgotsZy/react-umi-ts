@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import { sleep } from '@/utils/utils'
 import Tag from './subpage/tag'
 import TagGroup from './subpage/tagGroup'
 interface UserState {
@@ -35,12 +34,6 @@ export default class cashCouponManage extends Component<UserProp, UserState> {
   // 切换tab
   tabChange = async (type: string | number) => {
     this.setState({ currentTab: type + '' })
-    await sleep(500)
-    this.props.history.push({
-      query: {
-        key: type
-      }
-    });
   }
   render() {
     const { currentTab } = this.state;
@@ -54,7 +47,7 @@ export default class cashCouponManage extends Component<UserProp, UserState> {
         />
         <div style={{ marginTop: '30px' }}>
           {
-            currentTab == '1' ? <Tag history={this.props.history} /> : <TagGroup history={this.props.history} />
+            currentTab == '1' ? <Tag/> : <TagGroup/>
           }
         </div>
       </>

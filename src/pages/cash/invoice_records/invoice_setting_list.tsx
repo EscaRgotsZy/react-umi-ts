@@ -6,7 +6,8 @@ import {
   getInvoiceSettingParams,
   getInvoiceSettingList,
   deleteInvoiceSetting,
-} from '@/services/cash/invoice_records'
+} from '@/services/cash/invoice_records';
+import { saveUrlParams } from '@/utils/utils'
 const FormItem = Form.Item;
 interface UserState {
   searchUrl: any,
@@ -93,6 +94,11 @@ export default class invoiceSetting extends Component<UserProp, UserState> {
         size: pageSize,
         sortBy: '-createTime', 
       }
+      saveUrlParams({
+        invoiceTitle: params.invoiceTitle,
+        page: params.page,
+        size: params.size,
+      })
       this.setState({ loading: true });
       let res = await getInvoiceSettingList(params);  
       this.setState({ loading: false })

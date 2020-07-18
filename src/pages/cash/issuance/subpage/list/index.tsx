@@ -12,6 +12,7 @@ const productTypeList = ['', '现金券',];
 const couponTypeList = ['', '部分发放', '批量发放',];
 const applyList = ['', '发放成功', '发放失败',];
 import { getPageQuery } from '@/common/utils';
+import { saveUrlParams } from '@/utils/utils';
 import {
     getGrantList,
 } from '@/services/cash/issuance';
@@ -36,8 +37,8 @@ export default class IssuanceList extends Component<UserProp, UserState> {
         this.state = {
             searchParams,
             pageInfo: {
-                pageNum: searchParams.pageNum ? +searchParams.pageNum : 1,
-                pageSize: searchParams.pageSize ? +searchParams.pageSize : 10,
+                page: searchParams.page ? +searchParams.page : 1,
+                size: searchParams.size ? +searchParams.size : 10,
             },
             total: '',
             loading: false,
@@ -99,14 +100,17 @@ export default class IssuanceList extends Component<UserProp, UserState> {
         {
             title: '操作',
             render: (text: any, record: any, index: number) => <>
-                <Button type='primary' style={{ marginRight: '10px' }} onClick={() => this.props.history.push(`/cash/issuance/info?grantRecordId=${record.id}`)}><a href={`/#/cash/issuance/info?grantRecordId=${record.id}`}>详情</a></Button>
+                <Button type='primary' style={{ marginRight: '10px' }} ><a href={`/#/cash/issuance/info?grantRecordId=${record.id}`}>详情</a></Button>
             </>
         },
     ]
     componentDidMount() {
         let { beginTime, endTime, status } = this.state.searchParams;
         if (beginTime || endTime || status) {
-            this.formRef.current.setFieldsValue({ status })
+            this.formRef.current.setFieldsValue({ 
+                status,
+                issuaTime: [moment(beginTime), moment(endTime)],
+            })
             this.setState({ beginTime, endTime }, () => {
                 this.getDataList();
             })
@@ -119,14 +123,17 @@ export default class IssuanceList extends Component<UserProp, UserState> {
         let { status = '' } = this.formRef.current.getFieldsValue();
         status = status == '-1' ? '' : status;
         let query: any = {
-            page: pageInfo.pageNum,
-            size: pageInfo.pageSize,
+            page: pageInfo.page,
+            size: pageInfo.size,
             sortBy: '-createTime',
         }
         if (beginTime) query.beginTime = beginTime;
         if (endTime) query.endTime = endTime;
         if (status) query.status = status;
-        this.props.history.push({ search: `current=2&beginTime=${query.beginTime || ''}&endTime=${query.endTime || ''}&status=${query.status ? query.status : '-1'}&pageNum=${query.page || 1}&pageSize=${query.size || 10}` })
+        saveUrlParams({
+            current: 2,
+            ...query
+        })
         return query
     }
     getDataList = async () => {
@@ -138,16 +145,17 @@ export default class IssuanceList extends Component<UserProp, UserState> {
     query = () => {
         this.setState({
             pageInfo: {
-                pageSize: 10,
-                pageNum: 1
+                size: 10,
+                page: 1
             }
         }, () => this.getDataList())
     }
     reset = () => {
-        this.formRef.current.resetFields();
-        this.setState({ pageInfo: { pageSize: 10, pageNum: 1, }, endTime: '', beginTime: '' }, () => {
+        
+        this.setState({ pageInfo: { size: 10, page: 1, }, endTime: '', beginTime: '' }, () => {
             this.getDataList()
         })
+        this.formRef.current.resetFields();
     }
     refresh = () => {
         this.getDataList();
@@ -159,17 +167,15 @@ export default class IssuanceList extends Component<UserProp, UserState> {
         })
     }
     // 分页
-    onTableChange = ({ current, pageSize }: any) => {
-        Object.assign(this.state.pageInfo, { pageNum: current, pageSize: pageSize })
+    onTableChange = ({ current, size }: any) => {
+        Object.assign(this.state.pageInfo, { page: current, size: size })
         this.getDataList()
     }
     renderSearch = () => {
-        const { beginTime, endTime } = this.state;
         return (
             <Form layout="inline"
                 ref={this.formRef}
                 initialValues={{
-                    issuaTime: (beginTime && endTime) ? [moment(beginTime), moment(endTime)] : '',
                     status: '-1'
                 }}
             >
@@ -214,8 +220,8 @@ export default class IssuanceList extends Component<UserProp, UserState> {
         const pagination: any = {
             showQuickJumper: true,
             showSizeChanger: true,
-            current: pageInfo.pageNum,
-            pageSize: pageInfo.pageSize || 10,
+            current: pageInfo.page,
+            size: pageInfo.size || 10,
             total: total,
             showTotal: (t: number) => <div>共{t}条</div>
         }
